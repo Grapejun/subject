@@ -3,11 +3,10 @@ package opensource.example.subject.controller;
 import opensource.example.subject.model.Activity;
 import opensource.example.subject.repository.ActivityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,8 +33,11 @@ public class ActivityController {
     }
 
     @GetMapping("/urls")
-    public ResponseEntity<List<String>> getAllActivityUrls() {
-        List<String> urls = activityRepository.findAll().stream()
+    public ResponseEntity<List<String>> getAllActivityUrls(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<String> urls = activityRepository.findAll(pageable).stream()
                 .map(Activity::getUrl)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(urls);
@@ -50,5 +52,14 @@ public class ActivityController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    // 특정 progrmRegistNo의 Activity 데이터 반환 엔드포인트
+    @GetMapping("/activity/{progrmRegistNo}")
+    public ResponseEntity<Activity> getActivityByProgrmRegistNo(@PathVariable Integer progrmRegistNo) {
+        Optional<Activity> activityOptional = activityRepository.findByProgrmRegistNo(progrmRegistNo);
+        return activityOptional
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

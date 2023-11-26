@@ -71,7 +71,7 @@ public class Activity {
 
     @Column(nullable = false)
     @CsvBindByName
-    private Integer progrmSttusSe;
+    private String progrmSttusSe;
 
     @Column(nullable = false)
     @CsvBindByName

@@ -4,20 +4,19 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import opensource.example.subject.model.Activity;
 import opensource.example.subject.repository.ActivityRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Component
+//@Component
 public class CsvDataLoader implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(CsvDataLoader.class);
@@ -32,8 +31,6 @@ public class CsvDataLoader implements CommandLineRunner {
     public void run(String... args) throws Exception {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(new ClassPathResource("data/dataset.csv").getInputStream(), "CP949"));
-//        BufferedReader reader = new BufferedReader(
-//                new InputStreamReader(new ClassPathResource("data/dataset.csv").getInputStream()));
 
         CsvToBean<Activity> csvToBean = new CsvToBeanBuilder<Activity>(reader)
                 .withType(Activity.class)
