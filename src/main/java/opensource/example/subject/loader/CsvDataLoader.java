@@ -16,7 +16,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//@Component
+// @Component
 public class CsvDataLoader implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(CsvDataLoader.class);
