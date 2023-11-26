@@ -1,9 +1,15 @@
 package opensource.example.subject.model;
+import java.time.LocalDate;
+// import java.util.Date; // 이전 버전의 Date를 사용할 경우
 
 import jakarta.persistence.*;
 
+import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvCustomBindByName;
+
 import lombok.Getter;
 import lombok.Setter;
+import opensource.example.subject.converter.LocalDateConverter;
 
 @Getter
 @Setter
@@ -16,62 +22,82 @@ public class Activity {
     private Integer no;  // 대문자로 변경
 
     @Column(nullable = false)
+    @CsvBindByName
     private Integer actBeginTm;
 
     @Column(nullable = false)
+    @CsvBindByName
     private Integer actEndTm;
 
     @Column(columnDefinition = "TEXT", nullable = false)  // 대문자로 변경
+    @CsvBindByName
     private String actPlace;
 
     @Column(nullable = false)
+    @CsvBindByName
     private String adultPosblAt;  // 변경된 타입
 
     @Column(nullable = false)
+    @CsvBindByName
     private Integer gugunCd;  // 정수 타입으로 변경
 
     @Column(nullable = false)
+    @CsvBindByName(column = "nanmmbyNm")
     private String nanmmbyNm;
 
+    @CsvCustomBindByName(column = "noticeBgnde", converter = LocalDateConverter.class)
     @Column(nullable = false)
-    private String noticeBgnde;  // 문자열 타입으로 변경
+    private LocalDate noticeBgnde;
+
+    @CsvCustomBindByName(column = "noticeEndde", converter = LocalDateConverter.class)
+    @Column(nullable = false)
+    private LocalDate noticeEndde;
+
+    @CsvCustomBindByName(column = "progrmBgnde", converter = LocalDateConverter.class)
+    @Column(nullable = false)
+    private LocalDate progrmBgnde;
+
+    @CsvCustomBindByName(column = "progrmEndde", converter = LocalDateConverter.class)
+    @Column(nullable = false)
+    private LocalDate progrmEndde;
 
     @Column(nullable = false)
-    private String noticeEndde;  // 문자열 타입으로 변경
-
-    @Column(nullable = false)
-    private String progrmBgnde;  // 문자열 타입으로 변경
-
-    @Column(nullable = false)
-    private String progrmEndde;  // 문자열 타입으로 변경
-
-    @Column(nullable = false)
+    @CsvBindByName
     private Integer progrmRegistNo;
 
     @Column(columnDefinition = "TEXT", nullable = false)  // 대문자로 변경
+    @CsvBindByName
     private String progrmSj;
 
     @Column(nullable = false)
+    @CsvBindByName
     private Integer progrmSttusSe;
 
     @Column(nullable = false)
+    @CsvBindByName
     private Integer sidoCd;  // 정수 타입으로 변경
 
     @Column(columnDefinition = "TEXT", nullable = false)  // 대문자로 변경
+    @CsvBindByName
     private String srvcClCode;
 
     @Column(columnDefinition = "TEXT", nullable = false)  // 대문자로 변경
+    @CsvBindByName
     private String url;
 
     @Column(nullable = false)
+    @CsvBindByName
     private String yngbgsPosblAt;  // 변경된 타입
 
     @Column(nullable = false)
+    @CsvBindByName
     private String gugunNm;
 
     @Column(nullable = false)
+    @CsvBindByName
     private String sidoNm;
 
     @Column(nullable = false)
+    @CsvBindByName
     private String progrmCn;
 }
