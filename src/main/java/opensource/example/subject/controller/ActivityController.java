@@ -8,14 +8,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.time.ZoneId;
 
 
 
@@ -50,7 +53,6 @@ public class ActivityController {
         return ResponseEntity.ok(urls);
     }
 
-
     // 특정 ID의 Activity 데이터 반환 엔드포인트
     @GetMapping("/{id}")
     public ResponseEntity<Activity> getActivityById(@PathVariable Integer id) {
@@ -71,60 +73,7 @@ public class ActivityController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Constructor omitted for brevity
-
-    /*
-    @GetMapping("/search")
-    public ResponseEntity<List<Activity>> searchActivities(
-            @RequestParam(required = false) String gugunNm,
-            @RequestParam(required = false) String sidoNm,
-            @RequestParam(required = false) String srvcClCode,
-            @RequestParam(required = false) String yngbgsPosblAt,
-            @RequestParam(required = false) String adultPosblAt,
-            @RequestParam(required = false) String progrmSttusSe,
-            @RequestParam(required = false) Date progrmBgnde,
-            @RequestParam(required = false) Date progrmEndde,
-            @RequestParam(required = false) String progrmSj) {
-
-        Specification<Activity> spec = (root, query, cb) -> {
-            List<jakarta.persistence.criteria.Predicate> predicates = new ArrayList<>();
-
-            if (gugunNm != null) {
-                predicates.add(cb.equal(root.get("gugunNm"), gugunNm));
-            }
-            if (sidoNm != null) {
-                predicates.add(cb.equal(root.get("sidoNm"), sidoNm));
-            }
-            if (srvcClCode != null) {
-                predicates.add(cb.equal(root.get("srvcClCode"), srvcClCode));
-            }
-            if (yngbgsPosblAt != null) {
-                predicates.add(cb.equal(root.get("yngbgsPosblAt"), yngbgsPosblAt));
-            }
-            if (adultPosblAt != null) {
-                predicates.add(cb.equal(root.get("adultPosblAt"), adultPosblAt));
-            }
-            if (progrmSttusSe != null) {
-                predicates.add(cb.equal(root.get("progrmSttusSe"), progrmSttusSe));
-            }
-            if (progrmBgnde != null) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("actBeginTm"), progrmBgnde));
-            }
-            if (progrmEndde != null) {
-                predicates.add(cb.lessThanOrEqualTo(root.get("actEndTm"), progrmBgnde));
-            }
-            if (progrmSj != null) {
-                predicates.add(cb.like(root.get("progrmSj"), "%" + progrmSj + "%"));
-            }
-
-            return cb.and(predicates.toArray(new jakarta.persistence.criteria.Predicate[0]));
-        };
-
-        List<Activity> result = activityRepository.findAll(spec);
-        return ResponseEntity.ok(result);
-    }
-*/
-
+/* 페이징 O, 날짜 분류 X
     @GetMapping("/search")
     public ResponseEntity<List<Activity>> searchActivities(
             @RequestParam(required = false) String gugunNm,
@@ -179,7 +128,111 @@ public class ActivityController {
         return ResponseEntity.ok(resultPage.getContent());  // 페이지의 내용을 반환
     }
 
+ */
 
+/*    @GetMapping("/search")
+    public ResponseEntity<List<Activity>> searchActivities(
+            @RequestParam(required = false) String gugunNm,
+            @RequestParam(required = false) String sidoNm,
+            @RequestParam(required = false) String srvcClCode,
+            @RequestParam(required = false) String yngbgsPosblAt,
+            @RequestParam(required = false) String adultPosblAt,
+            @RequestParam(required = false) String progrmSttusSe,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate progrmBgnde,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate progrmEndde,
+            @RequestParam(required = false) String progrmSj) {  // 새로운 파라미터 추가
 
+        Specification<Activity> spec = (root, query, cb) -> {
+            List<jakarta.persistence.criteria.Predicate> predicates = new ArrayList<>();
 
+            if (gugunNm != null) {
+                predicates.add(cb.equal(root.get("gugunNm"), gugunNm));
+            }
+            if (sidoNm != null) {
+                predicates.add(cb.equal(root.get("sidoNm"), sidoNm));
+            }
+            if (srvcClCode != null) {
+                predicates.add(cb.equal(root.get("srvcClCode"), srvcClCode));
+            }
+            if (yngbgsPosblAt != null) {
+                predicates.add(cb.equal(root.get("yngbgsPosblAt"), yngbgsPosblAt));
+            }
+            if (adultPosblAt != null) {
+                predicates.add(cb.equal(root.get("adultPosblAt"), adultPosblAt));
+            }
+            if (progrmSttusSe != null) {
+                predicates.add(cb.equal(root.get("progrmSttusSe"), progrmSttusSe));
+            }
+            if (progrmBgnde != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("progrmBgnde"), progrmBgnde));
+            }
+            if (progrmEndde != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("progrmEndde"), progrmEndde));
+            }
+
+            if (progrmSj != null) {  // 문자열 포함 조건 추가
+                predicates.add(cb.like(root.get("progrmSj"), "%" + progrmSj + "%"));
+            }
+
+            return cb.and(predicates.toArray(new jakarta.persistence.criteria.Predicate[0]));
+        };
+
+        List<Activity> result = activityRepository.findAll(spec);
+        return ResponseEntity.ok(result);
+    }*/
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Activity>> searchActivities(
+            @RequestParam(required = false) String gugunNm,
+            @RequestParam(required = false) String sidoNm,
+            @RequestParam(required = false) String srvcClCode,
+            @RequestParam(required = false) String yngbgsPosblAt,
+            @RequestParam(required = false) String adultPosblAt,
+            @RequestParam(required = false) String progrmSttusSe,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate progrmBgnde,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate progrmEndde,
+            @RequestParam(required = false) String progrmSj,
+            @RequestParam(defaultValue = "0") int page,  // 페이지 번호 추가
+            @RequestParam(defaultValue = "10") int size) {  // 페이지 크기 (기본값 10)
+
+        Pageable pageable = PageRequest.of(page, size);  // Pageable 객체 생성
+
+        Specification<Activity> spec = (root, query, cb) -> {
+            List<jakarta.persistence.criteria.Predicate> predicates = new ArrayList<>();
+
+            if (gugunNm != null) {
+                predicates.add(cb.equal(root.get("gugunNm"), gugunNm));
+            }
+            if (sidoNm != null) {
+                predicates.add(cb.equal(root.get("sidoNm"), sidoNm));
+            }
+            if (srvcClCode != null) {
+                predicates.add(cb.equal(root.get("srvcClCode"), srvcClCode));
+            }
+            if (yngbgsPosblAt != null) {
+                predicates.add(cb.equal(root.get("yngbgsPosblAt"), yngbgsPosblAt));
+            }
+            if (adultPosblAt != null) {
+                predicates.add(cb.equal(root.get("adultPosblAt"), adultPosblAt));
+            }
+            if (progrmSttusSe != null) {
+                predicates.add(cb.equal(root.get("progrmSttusSe"), progrmSttusSe));
+            }
+            if (progrmBgnde != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("progrmBgnde"), progrmBgnde));
+            }
+            if (progrmEndde != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("progrmEndde"), progrmEndde));
+            }
+
+            if (progrmSj != null) {  // 문자열 포함 조건 추가
+                predicates.add(cb.like(root.get("progrmSj"), "%" + progrmSj + "%"));
+            }
+
+            return cb.and(predicates.toArray(new jakarta.persistence.criteria.Predicate[0]));
+        };
+
+        Page<Activity> resultPage = activityRepository.findAll(spec, pageable);  // 결과를 페이지네이션하여 받음
+        return ResponseEntity.ok(resultPage.getContent());  // 페이지의 내용을 반환
+    }
 }

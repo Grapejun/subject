@@ -12,3 +12,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
+server:
+  address: 0.0.0.0
+  port: 8080
