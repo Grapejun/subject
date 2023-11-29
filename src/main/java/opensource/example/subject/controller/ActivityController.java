@@ -23,6 +23,7 @@ import java.time.ZoneId;
 
 
 @RestController
+//@CrossOrigin(origins = "*", methods = RequestMethod.GET)
 @RequestMapping("/api/activities")
 public class ActivityController {
 
