@@ -27,11 +27,11 @@ public class Activity {
     @Column(nullable = false)
     @CsvBindByName
     private Integer actEndTm;
-/*
+
     @Column(nullable = false)
     @CsvBindByName
     private Integer actDuringTm;
-*/
+
     @Column(columnDefinition = "TEXT", nullable = false)  // 대문자로 변경
     @CsvBindByName
     private String actPlace;
