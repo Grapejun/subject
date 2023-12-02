@@ -1,6 +1,5 @@
 package opensource.example.subject.model;
 import java.time.LocalDate;
-// import java.util.Date; // 이전 버전의 Date를 사용할 경우
 
 import jakarta.persistence.*;
 
@@ -28,7 +27,11 @@ public class Activity {
     @Column(nullable = false)
     @CsvBindByName
     private Integer actEndTm;
-
+/*
+    @Column(nullable = false)
+    @CsvBindByName
+    private Integer actDuringTm;
+*/
     @Column(columnDefinition = "TEXT", nullable = false)  // 대문자로 변경
     @CsvBindByName
     private String actPlace;
@@ -42,7 +45,7 @@ public class Activity {
     private Integer gugunCd;  // 정수 타입으로 변경
 
     @Column(nullable = false)
-    @CsvBindByName(column = "nanmmbyNm")
+    @CsvBindByName
     private String nanmmbyNm;
 
     @CsvCustomBindByName(column = "noticeBgnde", converter = LocalDateConverter.class)
