@@ -103,4 +103,7 @@ public class Activity {
     @Column(nullable = false)
     @CsvBindByName
     private String progrmCn;
+
+    @Transient  // 데이터베이스에 저장되지 않는 필드
+    private LocalDate assignedDate;
 }
